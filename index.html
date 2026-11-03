@@ -1,0 +1,544 @@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tracking Error View -->
+                    <div id="trackingError" class="mt-6 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl text-sm hidden">
+                        Nenhum registro encontrado para este termo. Certifique-se do código gerado (ex: TS-XXXX) ou do e-mail.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATACENTER STORAGE / VISUALIZATION SECTION -->
+    <section id="datacenter" class="bg-slate-900 text-slate-100 py-16 border-t-4 border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <span class="px-2.5 py-1 text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-md uppercase tracking-wider">Servidor Local Interno</span>
+                    <h2 class="text-3xl font-bold text-white tracking-tight mt-2">Datacenter de Inscrições (BD)</h2>
+                    <p class="text-slate-400 text-sm">Armazenamento em Banco de Dados Persistente Local da TextilSul</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="clearDatacenter()" class="text-xs px-3 py-2 bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white rounded-lg border border-red-500/20 transition font-medium">
+                        Limpar Banco de Dados
+                    </button>
+                    <button onclick="seedInitialData()" class="text-xs px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition font-medium">
+                        Resetar para Padrão
+                    </button>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-slate-400 uppercase">Total de Documentos (Inscrições)</p>
+                    <p id="metaTotal" class="text-3xl font-extrabold text-white mt-1">0</p>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-slate-400 uppercase">Vaga: Vendedor(a)</p>
+                    <p id="metaVendas" class="text-3xl font-extrabold text-blue-400 mt-1">0</p>
+                </div>
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-slate-400 uppercase">Vaga: DEV Back-End</p>
+                    <p id="metaDev" class="text-3xl font-extrabold text-emerald-400 mt-1">0</p>
+                </div>
+            </div>
+
+            <!-- Datacenter Table & JSON Wrapper -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                <!-- Data Table View -->
+                <div class="xl:col-span-8 bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                    <div class="px-6 py-4 bg-slate-800/50 border-b border-slate-700 flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Tabela: candidaturas_collection</h3>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 font-bold border-b border-slate-700">
+                                <tr>
+                                    <th class="px-6 py-3">ID Primário</th>
+                                    <th class="px-6 py-3">Candidato</th>
+                                    <th class="px-6 py-3">Vaga</th>
+                                    <th class="px-6 py-3">Currículo Anexo</th>
+                                    <th class="px-6 py-3">Etapa</th>
+                                    <th class="px-6 py-3 text-right">Ação RH</th>
+                                </tr>
+                            </thead>
+                            <tbody id="datacenterTableBody" class="divide-y divide-slate-700/50">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Live JSON Schema Instance -->
+                <div class="xl:col-span-4 bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden flex flex-col">
+                    <div class="px-6 py-4 bg-slate-800/50 border-b border-slate-700">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Visualização JSON do Payload</h3>
+                    </div>
+                    <div class="p-4 flex-1 bg-slate-950 font-mono text-xs text-blue-300 overflow-y-auto max-h-96">
+                        <pre id="jsonSchemaDisplay" class="whitespace-pre-wrap text-[11px] leading-relaxed">{}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-200 mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-700">TextilSul Distribuidora B2B</span> &copy; 2026. Processos Seletivos.
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-slate-900 transition">Portal de Privacidade</a>
+                <a href="#" class="hover:text-slate-900 transition">Contato RH</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JOB APPLICATION MODAL -->
+    <div id="applicationModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-xs" onclick="closeModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100 modal-fade">
+                <div class="bg-white px-6 pt-6 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex items-start justify-between border-b border-gray-100 pb-3 mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900" id="modalJobTitle">Candidatura à Vaga</h3>
+                            <p class="text-xs text-gray-500 mt-1" id="modalJobCategory">Porto Alegre - RS</p>
+                        </div>
+                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="selectedJobId">
+
+                    <form id="applyForm" onsubmit="submitApplication(event)" class="space-y-4">
+                        <div>
+                            <label for="candName" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Nome Completo *</label>
+                            <input type="text" id="candName" required placeholder="Seu nome completo" class="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="candEmail" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">E-mail *</label>
+                                <input type="email" id="candEmail" required placeholder="seu@email.com" class="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                            </div>
+                            <div>
+                                <label for="candPhone" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Telefone *</label>
+                                <input type="tel" id="candPhone" required placeholder="(51) 99999-0000" class="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="candLinkedin" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">LinkedIn ou Portfólio</label>
+                            <input type="url" id="candLinkedin" placeholder="https://linkedin.com/in/seu-perfil" class="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Anexar Currículo *</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 transition cursor-pointer relative">
+                                <input type="file" id="candFile" required class="absolute inset-0 opacity-0 cursor-pointer" onchange="updateFileNameDisplay(this)">
+                                <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" id="uploadIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <p class="text-xs font-medium text-gray-600" id="uploadText">Clique para selecionar seu arquivo PDF ou DOCX</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-4 flex items-center justify-end gap-3 mt-6">
+                            <button type="button" onclick="closeModal()" class="px-4 h-10 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="px-5 h-10 text-sm font-semibold text-white bg-slate-700 hover:bg-slate-800 rounded-lg transition shadow-sm">
+                                Concluir Inscrição
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CURRICULUM PREVIEW MODAL FOR RH -->
+    <div id="cvPreviewModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-slate-950/80 transition-opacity backdrop-blur-xs" onclick="closeCVModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div class="inline-block align-middle bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-200 modal-fade">
+                <div class="bg-slate-900 px-6 py-4 flex items-center justify-between border-b border-slate-800 text-white">
+                    <div>
+                        <h3 class="text-md font-bold tracking-tight" id="previewModalTitle">Visualizador de Documentos RH</h3>
+                        <p class="text-xs text-slate-400" id="previewModalSubtitle">ID do Sistema: TS-0000</p>
+                    </div>
+                    <button onclick="closeCVModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <div class="p-6 bg-slate-50">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-xs max-h-96 overflow-y-auto">
+                        <div class="border-b border-gray-100 pb-4 mb-4">
+                            <h2 class="text-2xl font-bold text-gray-900" id="previewCandName">Nome do Candidato</h2>
+                            <p class="text-sm text-blue-600 font-medium" id="previewCandJob">Vaga Pretendida</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-50">
+                                <p><strong>📧 E-mail:</strong> <span id="previewCandEmail">--</span></p>
+                                <p><strong>📞 Telefone:</strong> <span id="previewCandPhone">--</span></p>
+                                <p class="col-span-2"><strong>🔗 Portfólio/LinkedIn:</strong> <span id="previewCandLink">--</span></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Conteúdo do Arquivo Anexo</h4>
+                            <div id="fileContentContainer" class="p-4 bg-slate-50 rounded-xl border border-gray-200 text-sm text-gray-700 font-mono whitespace-pre-wrap leading-relaxed">
+                                Nenhum dado textual extraível ou arquivo binário bruto.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex items-center justify-between bg-white border border-gray-200 p-3 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">📄</span>
+                            <div>
+                                <p class="text-xs font-bold text-gray-900" id="previewFileName">nome_do_arquivo.pdf</p>
+                                <p class="text-[10px] text-gray-400">Payload binário codificado em Base64 persistido</p>
+                            </div>
+                        </div>
+                        <a id="downloadBlobBtn" href="#" download="#" class="inline-flex items-center justify-center px-4 h-9 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition">
+                            📥 Baixar Arquivo Original
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS NOTIFICATION TOAST -->
+    <div id="successToast" class="fixed bottom-5 right-5 z-50 bg-slate-950 text-white p-5 rounded-2xl shadow-2xl border border-slate-800 max-w-sm hidden transform transition-all translate-y-10 opacity-0">
+        <div class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm text-white">Inscrição Gravada com Sucesso!</h4>
+                <p class="text-xs text-slate-400 mt-1">Seu payload foi inserido no Datacenter. Use o código abaixo para rastreamento:</p>
+                <div class="mt-2 flex items-center justify-between bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700 font-mono text-xs text-emerald-400">
+                    <span id="generatedCodeDisplay" class="font-bold">TS-XXXX</span>
+                    <button onclick="copyGeneratedCode()" class="text-[10px] text-slate-400 hover:text-white underline ml-2">Copiar</button>
+                </div>
+                <button onclick="hideToast()" class="text-[11px] text-slate-500 hover:text-slate-300 mt-3 block">Fechar Aviso</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP CORE LOGIC / DATACENTER ENGINE -->
+    <script>
+        const VAGAS_MOCK = {
+            1: { title: "Vendedor(a)", location: "Porto Alegre - RS" },
+            2: { title: "DEV Back-End", location: "Porto Alegre - RS" }
+        };
+
+        let dbApplications = {};
+        let currentUploadedFileData = null; // Buffer temporário para o binário do currículo
+
+        window.onload = function() {
+            if (!localStorage.getItem('ts_datacenter')) {
+                seedInitialData();
+            } else {
+                loadFromDatacenter();
+            }
+        };
+
+        function seedInitialData() {
+            const defaultDB = {
+                "ts-5541": {
+                    id: "TS-5541",
+                    name: "Mariana Santos",
+                    email: "mariana@email.com",
+                    phone: "(51) 98765-4321",
+                    linkedin: "https://linkedin.com",
+                    filename: "curriculo_comercial.pdf",
+                    fileData: "data:text/plain;base64,Q3VycmljdWx1bSBWaXRhZSAtIE1hcmlhbmEgU2FudG9zXG5FeHBlcmllbmNpYTogNSBhbm9zIGVtIHZlbmRhcyBCMkIsIGdlcmVuY2lhbWVudG8gZGUgY2FydGVpcmEgZGUgbG9qaXN0YXMsIG5lZ29jaWFjYW8gZGUgZ3JhbmRlcyBsb3RlcyBkZSB2ZXN0dWFyaW8u",
+                    jobTitle: "Vendedor(a)",
+                    currentStep: 2, 
+                    dates: ["02 Nov 2026", "Em análise curricular", "Aguardando", "Aguardando"]
+                }
+            };
+            localStorage.setItem('ts_datacenter', JSON.stringify(defaultDB));
+            loadFromDatacenter();
+        }
+
+        function loadFromDatacenter() {
+            dbApplications = JSON.parse(localStorage.getItem('ts_datacenter')) || {};
+            renderDatacenterViews();
+        }
+
+        function saveToDatacenter() {
+            try {
+                localStorage.setItem('ts_datacenter', JSON.stringify(dbApplications));
+                renderDatacenterViews();
+            } catch (e) {
+                alert("O arquivo inserido é muito grande para o armazenamento simulado do navegador (LocalStorage limit 5MB). Tente anexar um arquivo de texto leve ou PDF menor!");
+            }
+        }
+
+        function clearDatacenter() {
+            dbApplications = {};
+            saveToDatacenter();
+        }
+
+        function renderDatacenterViews() {
+            const tableBody = document.getElementById('datacenterTableBody');
+            tableBody.innerHTML = '';
+
+            let total = 0;
+            let vendasCount = 0;
+            let devCount = 0;
+
+            const uniqueApps = {};
+            Object.keys(dbApplications).forEach(key => {
+                const item = dbApplications[key];
+                uniqueApps[item.id] = item;
+            });
+
+            Object.values(uniqueApps).forEach(app => {
+                total++;
+                if(app.jobTitle === "Vendedor(a)") vendasCount++;
+                if(app.jobTitle === "DEV Back-End") devCount++;
+
+                let stepBadgeColor = "bg-blue-950 text-blue-400 border-blue-900";
+                let stepName = "Recebido";
+                if (app.currentStep === 2) { stepName = "Triagem Curricular"; stepBadgeColor = "bg-amber-950 text-amber-400 border-amber-900"; }
+                if (app.currentStep === 3) { stepName = "Entrevista"; stepBadgeColor = "bg-purple-950 text-purple-400 border-purple-900"; }
+                if (app.currentStep === 4) { stepName = "Proposta"; stepBadgeColor = "bg-emerald-950 text-emerald-400 border-emerald-900"; }
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-800/40 transition text-slate-300";
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-mono text-xs font-bold text-slate-400">${app.id}</td>
+                    <td class="px-6 py-4">
+                        <div class="font-semibold text-white">${app.name}</div>
+                        <div class="text-xs text-slate-400">${app.email}</div>
+                    </td>
+                    <td class="px-6 py-4 text-xs font-medium">${app.jobTitle}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="previewCV('${app.id}')" class="text-xs font-medium px-2 py-1 bg-slate-700 hover:bg-blue-600 hover:text-white rounded border border-slate-600 transition flex items-center gap-1">
+                            🔍 Ver Currículo
+                        </button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-0.5 text-xs font-medium border rounded ${stepBadgeColor}">${stepName}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <select onchange="updateStepFromDatacenter('${app.id}', this.value)" class="bg-slate-900 border border-slate-700 rounded p-1 text-xs text-slate-300 focus:outline-none focus:border-slate-500">
+                            <option value="1" ${app.currentStep === 1 ? 'selected' : ''}>Recebidos</option>
+                            <option value="2" ${app.currentStep === 2 ? 'selected' : ''}>Triagem</option>
+                            <option value="3" ${app.currentStep === 3 ? 'selected' : ''}>Entrevista</option>
+                            <option value="4" ${app.currentStep === 4 ? 'selected' : ''}>Proposta</option>
+                        </select>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById('metaTotal').innerText = total;
+            document.getElementById('metaVendas').innerText = vendasCount;
+            document.getElementById('metaDev').innerText = devCount;
+
+            document.getElementById('jsonSchemaDisplay').innerText = JSON.stringify(uniqueApps, null, 4);
+        }
+
+        function previewCV(appId) {
+            let foundApp = null;
+            Object.values(dbApplications).forEach(item => {
+                if(item.id === appId) foundApp = item;
+            });
+
+            if (!foundApp) return;
+
+            document.getElementById('previewModalSubtitle').innerText = `ID do Sistema: ${foundApp.id}`;
+            document.getElementById('previewCandName').innerText = foundApp.name;
+            document.getElementById('previewCandJob').innerText = `Vaga: ${foundApp.jobTitle}`;
+            document.getElementById('previewCandEmail').innerText = foundApp.email;
+            document.getElementById('previewCandPhone').innerText = foundApp.phone || 'Não informado';
+            document.getElementById('previewCandLink').innerText = foundApp.linkedin || 'Não informado';
+            document.getElementById('previewFileName').innerText = foundApp.filename;
+
+            const container = document.getElementById('fileContentContainer');
+            const downloadBtn = document.getElementById('downloadBlobBtn');
+
+            if (foundApp.fileData) {
+                downloadBtn.href = foundApp.fileData;
+                downloadBtn.download = foundApp.filename;
+                
+                // Tenta decodificar para exibição textual limpa no container se for do tipo texto/base64 simples
+                if (foundApp.fileData.includes("data:text/plain")) {
+                    const textContent = foundApp.fileData.split(',')[1];
+                    container.innerText = atob(textContent);
+                } else if(foundApp.fileData.includes("data:application/pdf")) {
+                    container.innerText = "[Documento PDF Binário]\nO navegador detectou um arquivo PDF estruturado. Use o botão abaixo para baixar e abrir localmente com formatação completa.";
+                } else {
+                    container.innerText = "[Arquivo Codificado em Base64]\n\nCódigo do Payload:\n" + foundApp.fileData.substring(0, 200) + "...";
+                }
+            } else {
+                container.innerText = "Nenhum arquivo físico binário encontrado no buffer deste registro.";
+                downloadBtn.href = "#";
+            }
+
+            document.getElementById('cvPreviewModal').classList.remove('hidden');
+        }
+
+        function closeCVModal() {
+            document.getElementById('cvPreviewModal').classList.add('hidden');
+        }
+
+        function updateStepFromDatacenter(appId, newStepValue) {
+            const stepNum = parseInt(newStepValue);
+            Object.keys(dbApplications).forEach(key => {
+                if (dbApplications[key].id === appId) {
+                    dbApplications[key].currentStep = stepNum;
+                    if(stepNum === 1) dbApplications[key].dates[1] = "Pendente";
+                    if(stepNum === 2) dbApplications[key].dates[1] = "Em análise de currículo";
+                    if(stepNum === 3) dbApplications[key].dates[2] = "Agendada com recrutadores";
+                    if(stepNum === 4) dbApplications[key].dates[3] = "Proposta comercial enviada";
+                }
+            });
+            saveToDatacenter();
+        }
+
+        function openApplyModal(id) {
+            const job = VAGAS_MOCK[id];
+            document.getElementById('selectedJobId').value = id;
+            document.getElementById('modalJobTitle').innerText = `Inscrição: ${job.title}`;
+            document.getElementById('modalJobCategory').innerText = `Unidade: ${job.location} | Contrato CLT`;
+            
+            const modal = document.getElementById('applicationModal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('applicationModal').classList.add('hidden');
+            document.getElementById('applyForm').reset();
+            currentUploadedFileData = null;
+            document.getElementById('uploadIcon').classList.remove('text-emerald-500');
+            document.getElementById('uploadText').innerText = "Clique para selecionar seu arquivo PDF ou DOCX";
+        }
+
+        function updateFileNameDisplay(input) {
+            if(input.files && input.files.length > 0) {
+                const file = input.files[0];
+                document.getElementById('uploadText').innerText = "Arquivo selecionado: " + file.name;
+                document.getElementById('uploadIcon').classList.add('text-emerald-500');
+                
+                // Conversão assíncrona do arquivo físico para DataURL persistível no banco
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentUploadedFileData = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function submitApplication(e) {
+            e.preventDefault();
+            const idVaga = document.getElementById('selectedJobId').value;
+            const job = VAGAS_MOCK[idVaga];
+            const name = document.getElementById('candName').value;
+            const email = document.getElementById('candEmail').value.toLowerCase().trim();
+            const phone = document.getElementById('candPhone').value;
+            const linkedin = document.getElementById('candLinkedin').value;
+            const fileInput = document.getElementById('candFile');
+            const filename = fileInput.files[0] ? fileInput.files[0].name : "curriculo_candidato.pdf";
+            
+            const numAleatorio = Math.floor(1000 + Math.random() * 9000);
+            const codigoRastreio = "TS-" + numAleatorio;
+
+            // Se o arquivo for lido como texto simples ou imagem, injeta a string correspondente. Caso contrário, gera um placeholder em texto caso o reader falhe.
+            const filePayload = currentUploadedFileData || ("data:text/plain;base64," + btoa("Formulário de inscrição TextilSul para " + name));
+
+            const payloadCandidatura = {
+                id: codigoRastreio,
+                name: name,
+                email: email,
+                phone: phone,
+                linkedin: linkedin,
+                filename: filename,
+                fileData: filePayload, 
+                jobTitle: job.title,
+                currentStep: 1,
+                dates: ["Recebido hoje via Portal", "Pendente", "Pendente", "Pendente"]
+            };
+
+            dbApplications[codigoRastreio.toLowerCase()] = payloadCandidatura;
+            dbApplications[email] = payloadCandidatura;
+
+            saveToDatacenter();
+            closeModal();
+            
+            document.getElementById('generatedCodeDisplay').innerText = codigoRastreio;
+            const toast = document.getElementById('successToast');
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 50);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('successToast');
+            toast.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => { toast.classList.add('hidden'); }, 300);
+        }
+
+        function copyGeneratedCode() {
+            const text = document.getElementById('generatedCodeDisplay').innerText;
+            const tempInput = document.createElement("textarea");
+            document.body.appendChild(tempInput);
+            tempInput.value = text;
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        }
+
+        function trackApplication() {
+            const term = document.getElementById('trackingCodeInput').value.toLowerCase().trim();
+            const resultBox = document.getElementById('trackingResult');
+            const errorBox = document.getElementById('trackingError');
+
+            if (!term) return;
+
+            const app = dbApplications[term];
+
+            if (!app) {
+                resultBox.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            errorBox.classList.add('hidden');
+            resultBox.classList.remove('hidden');
+
+            document.getElementById('trackJobTitle').innerText = app.jobTitle;
+            document.getElementById('trackCandidateInfo').innerText = `Candidato: ${app.name} | Registro: ${app.id}`;
+
+            for (let i = 1; i <= 4; i++) {
+                const iconNode = document.getElementById(`stepIcon-${i}`);
+                const dateText = document.getElementById(`stepDate-${i}`);
+
+                if (i < app.currentStep) {
+                    iconNode.className = "w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 z-10";
+                    dateText.className = "text-xs text-emerald-600 font-medium mt-0.5";
+                    dateText.innerText = "Concluído";
+                } else if (i === app.currentStep) {
+                    iconNode.className = "w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 z-10 ring-4 ring-blue-100 animate-pulse";
+                    dateText.className = "text-xs text-blue-600 font-semibold mt-0.5";
+                    dateText.innerText = app.dates[i - 1] || "Em processamento";
+                } else {
+                    iconNode.className = "w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center shrink-0 z-10";
+                    dateText.className = "text-xs text-gray-400 mt-0.5";
+                    dateText.innerText = "Aguardando";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
